@@ -1,4 +1,4 @@
-import { palette } from '../constants/Colors';
+import { palette } from '../constants/colors';
 import { ThemeColors, ThemePreset } from '../types';
 
 // --- LIGHT THEMES ---

@@ -101,6 +101,19 @@ export default function TabLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: t('tabs.profile'),
+            tabBarIcon: ({ focused, color }) => (
+              <TabIcon
+                name={focused ? 'person' : 'person-outline'}
+                focused={focused}
+                color={color}
+              />
+            ),
+          }}
+        />
       </Tabs>
 
       {/* Floating Action Button */}
