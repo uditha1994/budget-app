@@ -1,0 +1,282 @@
+export default {
+    // Common
+    common: {
+        appName: 'BudgetWise',
+        continue: 'Continue',
+        skip: 'Skip',
+        save: 'Save',
+        cancel: 'Cancel',
+        delete: 'Delete',
+        edit: 'Edit',
+        done: 'Done',
+        add: 'Add',
+        close: 'Close',
+        back: 'Back',
+        next: 'Next',
+        yes: 'Yes',
+        no: 'No',
+        ok: 'OK',
+        search: 'Search',
+        loading: 'Loading...',
+        error: 'Something went wrong',
+        retry: 'Retry',
+        noData: 'No data yet',
+        seeAll: 'See All',
+        today: 'Today',
+        yesterday: 'Yesterday',
+        thisWeek: 'This Week',
+        thisMonth: 'This Month',
+        total: 'Total',
+    },
+
+    // Onboarding
+    onboarding: {
+        welcome: {
+            title: 'Take Control of\nYour Money',
+            subtitle: 'Smart budgeting, beautiful insights, and a financial companion that actually helps you save.',
+            getStarted: 'Get Started',
+        },
+        language: {
+            title: 'Choose Your Language',
+            subtitle: 'You can change this anytime in settings',
+            english: 'English',
+            sinhala: 'සිංහල',
+            tamil: 'தமிழ்',
+        },
+        currency: {
+            title: 'Select Your Currency',
+            subtitle: 'This will be your default currency for all transactions',
+            searchPlaceholder: 'Search currency...',
+        },
+        setupComplete: {
+            title: "You're All Set! 🎉",
+            subtitle: 'Your financial journey starts now. Let\'s make every rupee count.',
+            letsGo: "Let's Go!",
+        },
+    },
+
+    // Tab Navigation
+    tabs: {
+        home: 'Home',
+        transactions: 'Transactions',
+        planner: 'Planner',
+        goals: 'Goals',
+        profile: 'Profile',
+    },
+
+    // Home Screen
+    home: {
+        greeting: {
+            morning: 'Good Morning',
+            afternoon: 'Good Afternoon',
+            evening: 'Good Evening',
+            night: 'Good Night',
+        },
+        totalBalance: 'Total Balance',
+        todaySpending: "Today's Spending",
+        monthlyBudget: 'Monthly Budget',
+        budgetLeft: 'left of {{amount}}',
+        budgetOverspent: 'overspent by {{amount}}',
+        recentTransactions: 'Recent Transactions',
+        quickAdd: 'Quick Add',
+        insights: 'Insights',
+        noTransactions: 'No transactions yet',
+        noTransactionsSubtitle: 'Tap + to add your first transaction',
+        spendingTrend: 'Spending Trend',
+        savingsProgress: 'Savings Progress',
+    },
+
+    // Transactions
+    transactions: {
+        title: 'Transactions',
+        addExpense: 'Add Expense',
+        addIncome: 'Add Income',
+        addTransfer: 'Transfer',
+        amount: 'Amount',
+        category: 'Category',
+        wallet: 'Wallet',
+        note: 'Note',
+        date: 'Date',
+        tags: 'Tags',
+        mood: 'How did this feel?',
+        receipt: 'Attach Receipt',
+        recurring: 'Recurring',
+        filters: 'Filters',
+        allCategories: 'All Categories',
+        income: 'Income',
+        expense: 'Expense',
+        transfer: 'Transfer',
+        noTransactions: 'No transactions found',
+        deleteConfirm: 'Delete this transaction?',
+        deleteMessage: 'This action cannot be undone.',
+    },
+
+    // Moods
+    moods: {
+        happy: 'Happy',
+        stressed: 'Stressed',
+        social: 'Social',
+        tired: 'Tired',
+        celebration: 'Celebration',
+        impulsive: 'Impulsive',
+        planned: 'Planned',
+        neutral: 'Neutral',
+    },
+
+    // Categories
+    categories: {
+        food: 'Food & Dining',
+        transport: 'Transport',
+        shopping: 'Shopping',
+        bills: 'Bills & Utilities',
+        entertainment: 'Entertainment',
+        health: 'Health & Fitness',
+        education: 'Education',
+        personal: 'Personal Care',
+        housing: 'Housing & Rent',
+        gifts: 'Gifts & Donations',
+        subscriptions: 'Subscriptions',
+        other: 'Other',
+        salary: 'Salary',
+        freelance: 'Freelance',
+        investment: 'Investment',
+        otherIncome: 'Other Income',
+    },
+
+    // Planner
+    planner: {
+        title: 'Planner',
+        budgets: 'Budgets',
+        reminders: 'Reminders',
+        eventBudgets: 'Event Budgets',
+        createBudget: 'Create Budget',
+        budgetAmount: 'Budget Amount',
+        spent: 'Spent',
+        remaining: 'Remaining',
+        overBudget: 'Over Budget',
+        onTrack: 'On Track',
+        nearLimit: 'Near Limit',
+        noBudgets: 'No budgets set',
+        noBudgetsSubtitle: 'Create budgets to track your spending limits',
+        addReminder: 'Add Reminder',
+        reminderTitle: 'Title',
+        reminderAmount: 'Amount',
+        reminderDate: 'Due Date',
+        reminderRepeat: 'Repeat',
+        noReminders: 'No reminders yet',
+    },
+
+    // Goals
+    goals: {
+        title: 'Goals',
+        createGoal: 'Create Goal',
+        goalTitle: 'Goal Title',
+        targetAmount: 'Target Amount',
+        currentAmount: 'Saved So Far',
+        dueDate: 'Target Date',
+        addMoney: 'Add Money',
+        progress: '{{percent}}% complete',
+        noGoals: 'No savings goals yet',
+        noGoalsSubtitle: 'Start a goal and watch your savings grow!',
+        completed: 'Completed! 🎉',
+        challenges: 'Challenges',
+        activeChallenges: 'Active Challenges',
+        noChallenges: 'No active challenges',
+    },
+
+    // Profile & Settings
+    profile: {
+        title: 'Profile',
+        settings: 'Settings',
+        general: 'General',
+        appearance: 'Appearance',
+        language: 'Language',
+        currency: 'Currency',
+        theme: 'Theme',
+        themeMode: 'Theme Mode',
+        light: 'Light',
+        dark: 'Dark',
+        system: 'System',
+        notifications: 'Notifications',
+        hapticFeedback: 'Haptic Feedback',
+        security: 'Security',
+        data: 'Data',
+        exportData: 'Export Data',
+        importData: 'Import Data',
+        clearData: 'Clear All Data',
+        clearDataConfirm: 'Are you sure?',
+        clearDataMessage: 'This will delete all your data permanently.',
+        about: 'About',
+        version: 'Version',
+        rateApp: 'Rate App',
+        feedback: 'Send Feedback',
+        wallets: 'Wallets',
+        manageWallets: 'Manage Wallets',
+        addWallet: 'Add Wallet',
+        editWallet: 'Edit Wallet',
+        walletName: 'Wallet Name',
+        walletType: 'Type',
+        walletBalance: 'Initial Balance',
+        categories: 'Categories',
+        manageCategories: 'Manage Categories',
+    },
+
+    // Wallet Types
+    walletTypes: {
+        cash: 'Cash',
+        bank: 'Bank Account',
+        card: 'Credit Card',
+        ewallet: 'E-Wallet',
+        savings: 'Savings Account',
+    },
+
+    // Budget Cycles
+    budgetCycles: {
+        weekly: 'Weekly',
+        monthly: 'Monthly',
+        yearly: 'Yearly',
+        event: 'Event',
+    },
+
+    // Insights
+    insights: {
+        title: 'Insights',
+        weeklyReport: 'Weekly Report',
+        spendingPattern: 'Spending Pattern',
+        topCategory: 'Top Spending Category',
+        savedThisMonth: 'Saved This Month',
+        comparedLastMonth: 'compared to last month',
+        tip: 'Tip',
+        warning: 'Warning',
+        achievement: 'Achievement',
+    },
+
+    // Cashflow Calendar
+    cashflow: {
+        title: 'Cashflow Calendar',
+        income: 'Income',
+        expenses: 'Expenses',
+        net: 'Net',
+        noEvents: 'No events for this day',
+    },
+
+    // Empty States
+    empty: {
+        wallets: {
+            title: 'Add Your First Wallet',
+            subtitle: 'Create a wallet to start tracking your money',
+        },
+        transactions: {
+            title: 'Start Tracking',
+            subtitle: 'Add your first transaction to see insights',
+        },
+        budgets: {
+            title: 'Set Your First Budget',
+            subtitle: 'Create spending limits for your categories',
+        },
+        goals: {
+            title: 'Dream Big, Start Small',
+            subtitle: 'Set a savings goal and we\'ll help you reach it',
+        },
+    },
+} as const;
