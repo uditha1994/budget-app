@@ -1,7 +1,3 @@
-// ============================================================
-// SETUP COMPLETE SCREEN
-// ============================================================
-
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -53,7 +49,9 @@ export default function SetupCompleteScreen() {
     const handleComplete = () => {
         triggerHaptic('success');
         setOnboardingCompleted(true);
-        router.replace('/(tabs)');
+        setTimeout(() => {
+            router.replace('/(tabs)');
+        }, 100);
     };
 
     return (

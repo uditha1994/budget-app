@@ -1,156 +1,310 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Tabs, useRouter } from 'expo-router';
+import { Tabs } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
-import { layout, shadows } from '../../src/constants';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { shadows } from '../../src/constants';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { triggerHaptic } from '../../src/utils/haptics';
 
 type IoniconsName = keyof typeof Ionicons.glyphMap;
 
-const TabIcon = ({
-  name,
-  focused,
-  color,
-}: {
-  name: IoniconsName;
-  focused: boolean;
-  color: string;
-}) => {
-  return <Ionicons name={name} size={focused ? 26 : 24} color={color} />;
-};
+const FAB_SIZE = 52;
 
 export default function TabLayout() {
   const { colors, isDark } = useTheme();
   const { t } = useTranslation();
-  const router = useRouter();
+  const insets = useSafeAreaInsets();
+
+  // Bottom padding - respect Android navigation bar
+  const bottomPadding = Math.max(insets.bottom, 12);
 
   return (
     <View style={styles.container}>
       <Tabs
+        tabBar={(props) => (
+          <CustomTabBar
+            {...props}
+            colors={colors}
+            isDark={isDark}
+            bottomPadding={bottomPadding}
+            t={t}
+          />
+        )}
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: colors.primary,
-          tabBarInactiveTintColor: colors.tabBarInactive,
-          tabBarStyle: {
-            backgroundColor: isDark ? colors.tabBar : colors.tabBar,
-            borderTopColor: colors.border,
-            borderTopWidth: isDark ? 0 : StyleSheet.hairlineWidth,
-            height: layout.tabBarHeight,
-            paddingBottom: Platform.OS === 'ios' ? 24 : 8,
-            paddingTop: 8,
-            ...(isDark ? {} : shadows.sm),
-          },
-          tabBarLabelStyle: {
-            fontSize: 11,
-            fontWeight: '600',
-            marginTop: 2,
-          },
         }}
       >
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: t('tabs.home'),
-            tabBarIcon: ({ focused, color }) => (
-              <TabIcon name={focused ? 'home' : 'home-outline'} focused={focused} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="transactions"
-          options={{
-            title: t('tabs.transactions'),
-            tabBarIcon: ({ focused, color }) => (
-              <TabIcon name={focused ? 'swap-horizontal' : 'swap-horizontal-outline'} focused={focused} color={color} />
-            ),
-          }}
-        />
-        {/* Spacer for FAB */}
+        <Tabs.Screen name="index" />
+        <Tabs.Screen name="transactions" />
+        <Tabs.Screen name="planner" />
+        <Tabs.Screen name="goals" />
+        <Tabs.Screen name="profile" />
         <Tabs.Screen
           name="add-placeholder"
-          options={{
-            title: '',
-            tabBarIcon: () => <View style={{ width: 60 }} />,
-            tabBarLabel: () => null,
-          }}
-          listeners={{
-            tabPress: (e) => {
-              e.preventDefault();
-              // Will open add transaction modal
-            },
-          }}
-        />
-        <Tabs.Screen
-          name="planner"
-          options={{
-            title: t('tabs.planner'),
-            tabBarIcon: ({ focused, color }) => (
-              <TabIcon name={focused ? 'calendar' : 'calendar-outline'} focused={focused} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="goals"
-          options={{
-            title: t('tabs.goals'),
-            tabBarIcon: ({ focused, color }) => (
-              <TabIcon name={focused ? 'flag' : 'flag-outline'} focused={focused} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="profile"
-          options={{
-            title: t('tabs.profile'),
-            tabBarIcon: ({ focused, color }) => (
-              <TabIcon
-                name={focused ? 'person' : 'person-outline'}
-                focused={focused}
-                color={color}
-              />
-            ),
-          }}
+          options={{ href: null }}
         />
       </Tabs>
-
-      {/* Floating Action Button */}
-      <Pressable
-        style={[styles.fabContainer]}
-        onPress={() => {
-          triggerHaptic('medium');
-          // Will navigate to add transaction
-        }}
-      >
-        <LinearGradient
-          colors={colors.gradientPrimary}
-          style={[styles.fab, shadows.glow(colors.primary)]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <Ionicons name="add" size={32} color="#FFFFFF" />
-        </LinearGradient>
-      </Pressable>
     </View>
   );
 }
+
+// ============================================================
+// CUSTOM TAB BAR COMPONENT
+// ============================================================
+
+interface TabConfig {
+  name: string;
+  label: string;
+  iconActive: IoniconsName;
+  iconInactive: IoniconsName;
+}
+
+function CustomTabBar({
+  state,
+  navigation,
+  colors,
+  isDark,
+  bottomPadding,
+  t,
+}: any) {
+  const tabs: TabConfig[] = [
+    {
+      name: 'index',
+      label: t('tabs.home'),
+      iconActive: 'home',
+      iconInactive: 'home-outline',
+    },
+    {
+      name: 'transactions',
+      label: t('tabs.transactions'),
+      iconActive: 'swap-horizontal',
+      iconInactive: 'swap-horizontal-outline',
+    },
+    {
+      name: 'planner',
+      label: t('tabs.planner'),
+      iconActive: 'calendar',
+      iconInactive: 'calendar-outline',
+    },
+    {
+      name: 'goals',
+      label: t('tabs.goals'),
+      iconActive: 'flag',
+      iconInactive: 'flag-outline',
+    },
+    {
+      name: 'profile',
+      label: t('tabs.profile'),
+      iconActive: 'person',
+      iconInactive: 'person-outline',
+    },
+  ];
+
+  // Filter only visible routes (exclude add-placeholder)
+  const visibleRoutes = state.routes.filter(
+    (route: any) => route.name !== 'add-placeholder'
+  );
+
+  return (
+    <View
+      style={[
+        tabBarStyles.container,
+        {
+          backgroundColor: isDark ? colors.tabBar : colors.tabBar,
+          borderTopColor: isDark ? 'transparent' : colors.border,
+          paddingBottom: bottomPadding,
+        },
+        !isDark && shadows.sm,
+      ]}
+    >
+      {/* Tab Items Row */}
+      <View style={tabBarStyles.tabRow}>
+        {/* First 2 tabs */}
+        {visibleRoutes.slice(0, 2).map((route: any, index: number) => {
+          const tab = tabs[index];
+          if (!tab) return null;
+          const isFocused = state.index === state.routes.indexOf(route);
+          return (
+            <TabItem
+              key={route.key}
+              tab={tab}
+              isFocused={isFocused}
+              colors={colors}
+              onPress={() => {
+                triggerHaptic('selection');
+                if (!isFocused) {
+                  navigation.navigate(route.name);
+                }
+              }}
+            />
+          );
+        })}
+
+        {/* FAB in center */}
+        <View style={tabBarStyles.fabWrapper}>
+          <Pressable
+            onPress={() => {
+              triggerHaptic('medium');
+              // Will open add transaction in Module 2
+            }}
+            style={({ pressed }) => [
+              tabBarStyles.fabPressable,
+              pressed && { transform: [{ scale: 0.9 }] },
+            ]}
+          >
+            <LinearGradient
+              colors={colors.gradientPrimary}
+              style={[tabBarStyles.fab, shadows.glow(colors.primary)]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <Ionicons name="add" size={26} color="#FFFFFF" />
+            </LinearGradient>
+          </Pressable>
+        </View>
+
+        {/* Last 3 tabs */}
+        {visibleRoutes.slice(2, 5).map((route: any, index: number) => {
+          const tabIndex = index + 2;
+          const tab = tabs[tabIndex];
+          if (!tab) return null;
+          const isFocused = state.index === state.routes.indexOf(route);
+          return (
+            <TabItem
+              key={route.key}
+              tab={tab}
+              isFocused={isFocused}
+              colors={colors}
+              onPress={() => {
+                triggerHaptic('selection');
+                if (!isFocused) {
+                  navigation.navigate(route.name);
+                }
+              }}
+            />
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+// ============================================================
+// INDIVIDUAL TAB ITEM
+// ============================================================
+
+function TabItem({
+  tab,
+  isFocused,
+  colors,
+  onPress,
+}: {
+  tab: TabConfig;
+  isFocused: boolean;
+  colors: any;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={tabBarStyles.tabItem}
+      android_ripple={{
+        color: colors.primary + '20',
+        borderless: true,
+        radius: 30,
+      }}
+    >
+      {/* Active indicator dot */}
+      {isFocused && (
+        <View
+          style={[
+            tabBarStyles.activeIndicator,
+            { backgroundColor: colors.primary },
+          ]}
+        />
+      )}
+
+      <Ionicons
+        name={isFocused ? tab.iconActive : tab.iconInactive}
+        size={22}
+        color={isFocused ? colors.primary : colors.tabBarInactive}
+      />
+
+      <Text
+        style={[
+          tabBarStyles.tabLabel,
+          {
+            color: isFocused ? colors.primary : colors.tabBarInactive,
+            fontWeight: isFocused ? '700' : '500',
+          },
+        ]}
+        numberOfLines={1}
+      >
+        {tab.label}
+      </Text>
+    </Pressable>
+  );
+}
+
+// ============================================================
+// STYLES
+// ============================================================
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  fabContainer: {
+});
+
+const tabBarStyles = StyleSheet.create({
+  container: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  tabRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingTop: 6,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    gap: 3,
+  },
+  activeIndicator: {
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 40 : 24,
-    alignSelf: 'center',
-    zIndex: 999,
+    top: 0,
+    width: 20,
+    height: 3,
+    borderRadius: 2,
+  },
+  tabLabel: {
+    fontSize: 10,
+    textAlign: 'center',
+  },
+  fabWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -30,
+    paddingHorizontal: 4,
+  },
+  fabPressable: {
+    transform: [{ scale: 1 }],
   },
   fab: {
-    width: layout.fabSize,
-    height: layout.fabSize,
-    borderRadius: layout.fabSize / 2,
+    width: FAB_SIZE,
+    height: FAB_SIZE,
+    borderRadius: FAB_SIZE / 2,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -5,10 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '../src/i18n';
+import { useSettingsStore } from '../src/stores/useSettingsStore';
 import { ThemeProvider, useTheme } from '../src/theme/ThemeContext';
 
 // Keep splash screen visible while we load
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => {
+  // Handle error silently - splash screen might already be hidden
+});
 
 function RootNavigation() {
   const { colors, isDark } = useTheme();
@@ -39,25 +42,35 @@ function RootNavigation() {
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
+  const [storeHydrated, setStoreHydrated] = useState(false);
 
   useEffect(() => {
-    const prepare = async () => {
-      try {
-        // Wait for Zustand store to rehydrate
-        // Small delay to ensure AsyncStorage has loaded
-        await new Promise(resolve => setTimeout(resolve, 500));
-      } catch (e) {
-        console.warn('Error during preparation:', e);
-      } finally {
-        setIsReady(true);
-        await SplashScreen.hideAsync();
-      }
-    };
+    // Listen for Zustand store rehydration
+    const unsub = useSettingsStore.persist.onFinishHydration(() => {
+      setStoreHydrated(true);
+    });
 
-    prepare();
+    // Check if already hydrated (can happen if storage is fast)
+    if (useSettingsStore.persist.hasHydrated()) {
+      setStoreHydrated(true);
+    }
+
+    return () => {
+      unsub();
+    };
   }, []);
 
-  if (!isReady) return null;
+  useEffect(() => {
+    if (storeHydrated) {
+      setIsReady(true);
+      SplashScreen.hideAsync().catch(() => { });
+    }
+  }, [storeHydrated]);
+
+  if (!isReady) {
+    // Return empty view while loading - splash screen covers this
+    return null;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

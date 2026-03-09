@@ -18,7 +18,7 @@ const initialState = {
 
 export const useSettingsStore = create<SettingsState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             ...initialState,
 
             setLanguage: (language: Language) => {
@@ -62,7 +62,6 @@ export const useSettingsStore = create<SettingsState>()(
         {
             name: 'budget-app-settings',
             storage: createJSONStorage(() => AsyncStorage),
-            // Only persist these fields
             partialize: (state) => ({
                 language: state.language,
                 currency: state.currency,
@@ -73,11 +72,17 @@ export const useSettingsStore = create<SettingsState>()(
                 notificationsEnabled: state.notificationsEnabled,
                 hapticEnabled: state.hapticEnabled,
             }),
-            onRehydrateStorage: () => (state) => {
-                // When store rehydrates, sync language
-                if (state?.language) {
-                    i18n.changeLanguage(state.language);
-                }
+            onRehydrateStorage: () => {
+                return (state, error) => {
+                    if (error) {
+                        console.warn('Settings store rehydration error:', error);
+                        return;
+                    }
+                    // Sync language when store rehydrates
+                    if (state?.language) {
+                        i18n.changeLanguage(state.language);
+                    }
+                };
             },
         }
     )
