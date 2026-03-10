@@ -19,6 +19,7 @@ import { spacing, typography } from '../../src/constants';
 import { useSettingsStore } from '../../src/stores/useSettingsStore';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { triggerHaptic } from '../../src/utils/haptics';
+import { useWalletStore } from '../../src/stores/useWalletStore';
 
 const { width } = Dimensions.get('window');
 
@@ -27,6 +28,7 @@ export default function SetupCompleteScreen() {
     const { colors } = useTheme();
     const { t } = useTranslation();
     const setOnboardingCompleted = useSettingsStore((s) => s.setOnboardingCompleted);
+    const addWallet = useWalletStore((s) => s.addWallet);
 
     // Celebration animation
     const celebrationScale = useSharedValue(0);
@@ -47,12 +49,26 @@ export default function SetupCompleteScreen() {
     }));
 
     const handleComplete = () => {
-        triggerHaptic('success');
-        setOnboardingCompleted(true);
-        setTimeout(() => {
-            router.replace('/(tabs)');
-        }, 100);
-    };
+  triggerHaptic('success');
+
+  // Create default cash wallet if no wallets exist
+  const wallets = useWalletStore.getState().wallets;
+  if (wallets.length === 0) {
+    addWallet({
+      name: 'Cash',
+      type: 'cash',
+      currentBalance: 0,
+      icon: 'cash',
+      color: '#22C55E',
+      isDefault: true,
+    });
+  }
+
+  setOnboardingCompleted(true);
+  setTimeout(() => {
+    router.replace('/(tabs)');
+  }, 100);
+};
 
     return (
         <ScreenWrapper>

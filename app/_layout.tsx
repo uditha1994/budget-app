@@ -35,6 +35,13 @@ function RootNavigation() {
           name="(tabs)"
           options={{ animation: 'fade' }}
         />
+        <Stack.Screen
+          name="add-transaction"
+          options={{
+            animation: 'slide_from_bottom',
+            presentation: 'modal',
+          }}
+        />
       </Stack>
     </>
   );

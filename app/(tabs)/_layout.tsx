@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { shadows } from '../../src/constants';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { triggerHaptic } from '../../src/utils/haptics';
+import { useRouter } from 'expo-router';
 
 type IoniconsName = keyof typeof Ionicons.glyphMap;
 
@@ -22,6 +23,7 @@ export default function TabLayout() {
   const { colors, isDark } = useTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   // Bottom padding - respect Android navigation bar
   const bottomPadding = Math.max(insets.bottom, 12);
@@ -153,7 +155,8 @@ function CustomTabBar({
           <Pressable
             onPress={() => {
               triggerHaptic('medium');
-              // Will open add transaction in Module 2
+              navigation.navigate('add-transaction');
+              // router.push('/add-transaction');
             }}
             style={({ pressed }) => [
               tabBarStyles.fabPressable,
